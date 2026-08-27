@@ -1,8 +1,8 @@
-import { getCommands } from "./command.js";
+import { State } from "../state.js";
 
-export function commandHelp() {
+export function commandHelp(state: State) {
   console.log("Welcome to the Pokedex!\nUsage:\n");
-  Object.values(getCommands()).forEach((command) => {
+  Object.values(state.commandRegistry).forEach((command) => {
     console.log(`${command.name}: ${command.description}`);
   });
 }
