@@ -1,5 +1,5 @@
 import { createInterface } from "node:readline/promises";
-
+import { getCommands } from "./commands/command.js";
 export function cleanInput(input: string): string[] {
   const trimmed = (input ?? "").trim();
   if (trimmed === "") return [];
@@ -14,8 +14,13 @@ export function startREPL() {
   });
   rl.prompt();
   rl.on("line", (line) => {
-    const clean = cleanInput(line);
-    if (clean.length > 0) console.log(`Your command was: ${clean[0]}`);
+    const input = cleanInput(line);
+    const command = getCommands()[input[0]];
+    if (command === undefined) {
+      console.log("Unknown command");
+    } else {
+      command.callback();
+    }
     rl.prompt();
   });
 }
