@@ -1,6 +1,7 @@
 import { createInterface, Interface } from "readline";
 import {
   commandExit,
+  commandExplore,
   commandHelp,
   commandMap,
   commandMapB,
@@ -18,7 +19,7 @@ export type State = {
 export type CLICommand = {
   name: string;
   description: string;
-  callback: (state: State) => Promise<void>;
+  callback: (state: State, ...args: string[]) => Promise<void>;
 };
 
 export function initState(): State {
@@ -48,6 +49,11 @@ export function initState(): State {
         name: "mapb",
         description: "List the previous 20 location areas",
         callback: commandMapB,
+      },
+      explore: {
+        name: "explore",
+        description: "List all Pokemon who appear in a given location area",
+        callback: commandExplore,
       },
     },
     pokeAPI: new PokeAPI(),

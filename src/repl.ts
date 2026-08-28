@@ -16,8 +16,11 @@ export async function startREPL(state: State) {
       console.log("Unknown command");
     } else {
       rl.pause();
-      await command.callback(state);
-      rl.resume();
+      try {
+        await command.callback(state, ...input.slice(1));
+      } catch (error) {
+        console.error(error, (error as Error).cause);
+      }
     }
     rl.prompt();
   });

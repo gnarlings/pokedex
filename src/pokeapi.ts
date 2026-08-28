@@ -1,3 +1,4 @@
+import { isErrored } from "stream";
 import { Cache } from "./pokecache.js";
 
 export class PokeAPI {
@@ -12,36 +13,26 @@ export class PokeAPI {
     if (entry) {
       return entry;
     }
-    try {
-      const response = await fetch(url);
-      if (!response.ok) throw new Error(`Reponse status: ${response.status}`);
+    const response = await fetch(url);
+    if (!response.ok) throw new Error(`Reponse status: ${response.status}`);
 
-      const result: ShallowLocations = await response.json();
-      this.#cache.add(url, result);
-      return result;
-    } catch (error) {
-      console.error(error, (error as Error).cause);
-      throw error;
-    }
+    const result: ShallowLocations = await response.json();
+    this.#cache.add(url, result);
+    return result;
   }
 
-  async fetchLocation(locationName: string): Promise<LocationArea> {
-    const url = `${PokeAPI.baseURL}/location-area/${locationName}`;
+  async fetchLocationArea(locationAreaName: string): Promise<LocationArea> {
+    const url = `${PokeAPI.baseURL}/location-area/${locationAreaName}`;
     const entry: LocationArea | undefined = this.#cache.get(url);
     if (entry) {
       return entry;
     }
-    try {
-      const response = await fetch(url);
-      if (!response.ok) throw new Error(`Reponse status: ${response.status}`);
+    const response = await fetch(url);
+    if (!response.ok) throw new Error(`Reponse status: ${response.status}`);
 
-      const result: LocationArea = await response.json();
-      this.#cache.add(url, result);
-      return result;
-    } catch (error) {
-      console.error(error, (error as Error).cause);
-      throw error;
-    }
+    const result: LocationArea = await response.json();
+    this.#cache.add(url, result);
+    return result;
   }
 
   stopCacheReapLoop() {
