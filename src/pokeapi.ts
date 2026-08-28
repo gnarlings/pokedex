@@ -1,16 +1,23 @@
+import { Cache } from "./pokecache.js";
+
 export class PokeAPI {
   private static readonly baseURL = "https://pokeapi.co/api/v2";
+  #cache = new Cache(3_600_600);
 
   constructor() {}
 
   async fetchLocations(pageURL?: string): Promise<ShallowLocations> {
     const url = `${PokeAPI.baseURL}${pageURL ?? "/location-area"}`;
-    console.log(`fetching ${url}`);
+    const entry: ShallowLocations | undefined = this.#cache.get(url);
+    if (entry) {
+      return entry;
+    }
     try {
       const response = await fetch(url);
       if (!response.ok) throw new Error(`Reponse status: ${response.status}`);
 
       const result: ShallowLocations = await response.json();
+      this.#cache.add(url, result);
       return result;
     } catch (error) {
       console.error(error, (error as Error).cause);
@@ -20,16 +27,25 @@ export class PokeAPI {
 
   async fetchLocation(locationName: string): Promise<LocationArea> {
     const url = `${PokeAPI.baseURL}/location-area/${locationName}`;
+    const entry: LocationArea | undefined = this.#cache.get(url);
+    if (entry) {
+      return entry;
+    }
     try {
       const response = await fetch(url);
       if (!response.ok) throw new Error(`Reponse status: ${response.status}`);
 
       const result: LocationArea = await response.json();
+      this.#cache.add(url, result);
       return result;
     } catch (error) {
       console.error(error, (error as Error).cause);
       throw error;
     }
+  }
+
+  stopCacheReapLoop() {
+    this.#cache.stopReapLoop();
   }
 }
 
