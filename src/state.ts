@@ -1,5 +1,6 @@
 import { createInterface, Interface } from "readline";
 import {
+  commandCatch,
   commandExit,
   commandExplore,
   commandHelp,
@@ -7,6 +8,7 @@ import {
   commandMapB,
 } from "./commands/index.js";
 import { PokeAPI } from "./pokeapi.js";
+import { Pokemon } from "./types/pokemon.js";
 
 export type State = {
   readline: Interface;
@@ -14,6 +16,7 @@ export type State = {
   pokeAPI: PokeAPI;
   nextLocationsURL: string | undefined;
   prevLocationsURL: string | undefined;
+  pokedex: Record<string, Pokemon>;
 };
 
 export type CLICommand = {
@@ -55,9 +58,15 @@ export function initState(): State {
         description: "List all Pokemon who appear in a given location area",
         callback: commandExplore,
       },
+      catch: {
+        name: "catch",
+        description: "Attempt to catch a pokemon",
+        callback: commandCatch,
+      },
     },
     pokeAPI: new PokeAPI(),
     nextLocationsURL: "/location-area/?offset=0&limit=20",
     prevLocationsURL: undefined,
+    pokedex: {},
   };
 }

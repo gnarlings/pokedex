@@ -3,3 +3,4 @@ export * from "./help.js";
 export * from "./map.js";
 export * from "./mapb.js";
 export * from "./explore.js";
+export * from "./catch.js";
