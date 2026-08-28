@@ -1,15 +1,24 @@
 import { createInterface, Interface } from "readline";
-import { commandExit, commandHelp } from "./commands/index.js";
+import {
+  commandExit,
+  commandHelp,
+  commandMap,
+  commandMapB,
+} from "./commands/index.js";
+import { PokeAPI } from "./pokeapi.js";
 
 export type State = {
   readline: Interface;
   commandRegistry: Record<string, CLICommand>;
+  pokeAPI: PokeAPI;
+  nextLocationsURL: string | undefined;
+  prevLocationsURL: string | undefined;
 };
 
 export type CLICommand = {
   name: string;
   description: string;
-  callback: (state: State) => void;
+  callback: (state: State) => Promise<void>;
 };
 
 export function initState(): State {
@@ -30,6 +39,19 @@ export function initState(): State {
         description: "Exit the Pokedex",
         callback: commandExit,
       },
+      map: {
+        name: "map",
+        description: "List the next 20 location areas",
+        callback: commandMap,
+      },
+      mapb: {
+        name: "mapb",
+        description: "List the previous 20 location areas",
+        callback: commandMapB,
+      },
     },
+    pokeAPI: new PokeAPI(),
+    nextLocationsURL: "/location-area/?offset=0&limit=20",
+    prevLocationsURL: undefined,
   };
 }
