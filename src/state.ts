@@ -7,6 +7,7 @@ import {
   commandInspect,
   commandMap,
   commandMapB,
+  commandPokedex,
 } from "./commands/index.js";
 import { PokeAPI } from "./pokeapi.js";
 import { Pokemon } from "./types/pokemon.js";
@@ -68,6 +69,11 @@ export function initState(): State {
         name: "inspect",
         description: "Inspect a pokemon in your pokedex",
         callback: commandInspect,
+      },
+      pokedex: {
+        name: "pokedex",
+        description: "List Pokemon in your Pokedex",
+        callback: commandPokedex,
       },
     },
     pokeAPI: new PokeAPI(),
