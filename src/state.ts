@@ -4,6 +4,7 @@ import {
   commandExit,
   commandExplore,
   commandHelp,
+  commandInspect,
   commandMap,
   commandMapB,
 } from "./commands/index.js";
@@ -62,6 +63,11 @@ export function initState(): State {
         name: "catch",
         description: "Attempt to catch a pokemon",
         callback: commandCatch,
+      },
+      inspect: {
+        name: "inspect",
+        description: "Inspect a pokemon in your pokedex",
+        callback: commandInspect,
       },
     },
     pokeAPI: new PokeAPI(),
